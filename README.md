@@ -2,8 +2,8 @@
 
 InternConnect is a modern, responsive web application that helps students discover, explore, and apply for internships through a clean, intuitive interface. Inspired by real-world job portals, the project focuses heavily on **UI/UX**, smooth navigation, and realistic application workflows.
 
-🔗 **Live Demo:** _Add Firebase Hosting link here_  
-📸 **Screenshots:** _Add dashboard screenshots here_
+🔗 **Live Demo:**  
+📸 **Screenshots:** 
 
 ---
 
