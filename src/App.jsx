@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { HashRouter, Routes, Route, Link, useNavigate, useLocation, useParams } from 'react-router-dom';
-import { Search, MapPin, Briefcase, DollarSign, Clock, Filter, CheckCircle, User, Mail, Lock, ArrowRight, Sun, Moon, Trash2, ChevronLeft, Star, ChevronRight, X, Building2, GraduationCap, FileText, Download, Edit3 } from 'lucide-react';
+import { Search, MapPin, Briefcase, DollarSign, Clock, Filter, CheckCircle, User, Mail, Lock, ArrowRight, Sun, Moon, Trash2, ChevronLeft, Star, ChevronRight, X, Building2, GraduationCap, FileText, Download, Edit3, Loader2 } from 'lucide-react';
 
 const AnimationStyles = () => (
   <style>{`
@@ -12,20 +12,15 @@ const AnimationStyles = () => (
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
     }
-    @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
     .animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
     .animate-scroll { animation: scroll 30s linear infinite; }
-    .animate-slide-in { animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
     .hover-scale { transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
     .hover-scale:hover { transform: scale(1.02); }
     .btn-press:active { transform: scale(0.95); }
-    .glass { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); }
   `}</style>
 );
 
+// --- REAL COMPANY DATA ---
 const COMPANY_DATA = [
   { name: "Infosys", logo: "https://upload.wikimedia.org/wikipedia/commons/9/95/Infosys_logo.svg" },
   { name: "Google", logo: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" },
@@ -33,7 +28,7 @@ const COMPANY_DATA = [
   { name: "Amazon", logo: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" },
   { name: "TCS", logo: "https://upload.wikimedia.org/wikipedia/commons/b/b1/Tata_Consultancy_Services_Logo.svg" },
   { name: "Wipro", logo: "https://upload.wikimedia.org/wikipedia/commons/a/a0/Wipro_Primary_Logo_Color_RGB.svg" },
-  { name: "Deloitte", logo: "https://upload.wikimedia.org/wikipedia/commons/5/56/Deloitte.svg" }, 
+  { name: "Deloitte", logo: "https://upload.wikimedia.org/wikipedia/commons/5/56/Deloitte.svg" },
   { name: "Meta", logo: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg" },
   { name: "Netflix", logo: "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" }
 ];
@@ -180,12 +175,11 @@ const initialJobs = [
 
 const Toast = ({ message, type, onClose }) => {
   if (!message) return null;
-  
   const bgColor = type === 'error' ? 'bg-red-500' : 'bg-emerald-500';
   const icon = type === 'error' ? <X size={18} /> : <CheckCircle size={18} />;
 
   return (
-    <div className={`fixed bottom-6 right-6 z-[100] ${bgColor} text-white px-6 py-4 rounded-lg shadow-2xl flex items-center gap-3 animate-slide-in`}>
+    <div className={`fixed bottom-6 right-6 z-[100] ${bgColor} text-white px-6 py-4 rounded-lg shadow-2xl flex items-center gap-3 animate-fade-in-up`}>
       {icon}
       <span className="font-medium">{message}</span>
       <button onClick={onClose} className="ml-4 hover:bg-white/20 p-1 rounded-full"><X size={14}/></button>
@@ -244,7 +238,7 @@ const Navbar = ({ currentUser, setCurrentUser, darkMode, setDarkMode, themeClass
   );
 };
 
-const Home = ({ jobs, appliedJobs, darkMode, themeClasses }) => {
+const Home = ({ jobs, appliedJobs, loading, darkMode, themeClasses }) => {
   const [filterCategory, setFilterCategory] = useState("All");
   const [filterCity, setFilterCity] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
@@ -256,13 +250,17 @@ const Home = ({ jobs, appliedJobs, darkMode, themeClasses }) => {
     setCurrentPage(1);
   }, [filterCategory, filterCity, searchTerm]);
 
+  // Filter Logic
   const filteredJobs = jobs.filter(job => {
     const matchesCategory = filterCategory === "All" || job.category === filterCategory;
     const matchesCity = filterCity === "All" || job.location.includes(filterCity);
-    const matchesSearch = job.role.toLowerCase().includes(searchTerm.toLowerCase()) || job.company.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = 
+      (job.role && job.role.toLowerCase().includes(searchTerm.toLowerCase())) || 
+      (job.company && job.company.toLowerCase().includes(searchTerm.toLowerCase()));
     return matchesCategory && matchesCity && matchesSearch;
   });
 
+  // Pagination Logic
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
   const currentJobs = filteredJobs.slice(indexOfFirstJob, indexOfLastJob);
@@ -280,7 +278,7 @@ const Home = ({ jobs, appliedJobs, darkMode, themeClasses }) => {
           Launch Your Career <span className="text-blue-200">Today</span>
         </h1>
         <p className="text-blue-100 mb-10 max-w-2xl mx-auto text-lg relative z-10 animate-fade-in-up" style={{animationDelay: '0.1s'}}>
-          Access 5000+ internships from top companies.
+          Access top internships from leading companies.
         </p>
         
         <div className={`max-w-2xl mx-auto rounded-full p-2 flex shadow-2xl animate-fade-in-up transition-colors duration-300 relative z-10 ${darkMode ? 'bg-slate-800/90 backdrop-blur' : 'bg-white/95 backdrop-blur'}`} style={{animationDelay: '0.2s'}}>
@@ -348,41 +346,48 @@ const Home = ({ jobs, appliedJobs, darkMode, themeClasses }) => {
             <span className={`text-sm ${themeClasses.subText}`}>Page {currentPage} of {totalPages}</span>
           </div>
           
-          <div className="space-y-4">
-            {currentJobs.map((job, index) => (
-              <div 
-                key={job.id} 
-                onClick={() => navigate(`/jobs/${job.id}`)} 
-                className={`p-6 rounded-xl border shadow-sm transition-all hover-scale cursor-pointer ${themeClasses.card}`}
-                style={{animationDelay: `${index * 0.1}s`}}
-              >
-                <div className="flex justify-between items-start">
-                  <div className="flex gap-4">
-                    <img src={job.logo} alt="Logo" className={`w-14 h-14 rounded-xl shadow-sm object-contain p-1 ${darkMode ? 'brightness-0 invert' : ''}`} />
-                    <div>
-                      <h3 className={`font-bold text-lg group-hover:text-blue-600 transition-colors ${themeClasses.heading}`}>{job.role}</h3>
-                      <div className="flex items-center gap-2 mt-1">
-                        <Building2 size={14} className={darkMode ? 'text-slate-400' : 'text-slate-500'} />
-                        <p className={`text-sm font-medium ${themeClasses.subText}`}>{job.company}</p>
-                      </div>
+          {loading ? (
+             <div className="flex flex-col items-center justify-center h-64 text-blue-600">
+               <Loader2 size={40} className="animate-spin mb-4" />
+               <p className="text-slate-500 font-medium">Fetching jobs from server...</p>
+             </div>
+          ) : (
+            <div className="space-y-4">
+                {currentJobs.map((job, index) => (
+                <div 
+                    key={job._id || job.id} 
+                    onClick={() => navigate(`/jobs/${job._id || job.id}`)} 
+                    className={`p-6 rounded-xl border shadow-sm transition-all hover-scale cursor-pointer ${themeClasses.card}`}
+                    style={{animationDelay: `${index * 0.1}s`}}
+                >
+                    <div className="flex justify-between items-start">
+                    <div className="flex gap-4">
+                        <img src={job.logo} alt="Logo" className={`w-14 h-14 rounded-xl shadow-sm object-contain p-1 ${darkMode ? 'brightness-0 invert' : ''}`} />
+                        <div>
+                        <h3 className={`font-bold text-lg group-hover:text-blue-600 transition-colors ${themeClasses.heading}`}>{job.role}</h3>
+                        <div className="flex items-center gap-2 mt-1">
+                            <Building2 size={14} className={darkMode ? 'text-slate-400' : 'text-slate-500'} />
+                            <p className={`text-sm font-medium ${themeClasses.subText}`}>{job.company}</p>
+                        </div>
+                        </div>
                     </div>
-                  </div>
-                  {appliedJobs.includes(job.id) ? (
-                    <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 border border-emerald-200"><CheckCircle size={14} /> Applied</span>
-                  ) : (
-                    <span className={`px-3 py-1 rounded-full text-xs font-bold border ${darkMode ? 'bg-slate-800 text-slate-300 border-slate-700' : 'bg-slate-50 text-slate-600 border-slate-200'}`}>{job.type}</span>
-                  )}
+                    {appliedJobs.includes(job._id || job.id) ? (
+                        <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 border border-emerald-200"><CheckCircle size={14} /> Applied</span>
+                    ) : (
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold border ${darkMode ? 'bg-slate-800 text-slate-300 border-slate-700' : 'bg-slate-50 text-slate-600 border-slate-200'}`}>{job.type}</span>
+                    )}
+                    </div>
+                    <div className={`flex items-center gap-6 mt-5 text-sm font-medium ${themeClasses.subText}`}>
+                    <div className="flex items-center gap-1.5"><MapPin size={16} /> {job.location}</div>
+                    <div className="flex items-center gap-1.5"><DollarSign size={16} /> {job.stipend}</div>
+                    <div className="flex items-center gap-1.5"><Clock size={16} /> {job.duration}</div>
+                    </div>
                 </div>
-                <div className={`flex items-center gap-6 mt-5 text-sm font-medium ${themeClasses.subText}`}>
-                  <div className="flex items-center gap-1.5"><MapPin size={16} /> {job.location}</div>
-                  <div className="flex items-center gap-1.5"><DollarSign size={16} /> {job.stipend}</div>
-                  <div className="flex items-center gap-1.5"><Clock size={16} /> {job.duration}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+                ))}
+            </div>
+          )}
 
-          {filteredJobs.length === 0 && (
+          {!loading && filteredJobs.length === 0 && (
             <div className={`text-center py-16 rounded-xl border border-dashed flex flex-col items-center justify-center ${darkMode ? 'bg-slate-800 border-slate-700 text-slate-400' : 'bg-white border-slate-200 text-slate-500'}`}>
               <Filter size={40} className="mb-4 opacity-50" />
               <p className="font-medium">No internships found matching your criteria.</p>
@@ -390,7 +395,7 @@ const Home = ({ jobs, appliedJobs, darkMode, themeClasses }) => {
             </div>
           )}
 
-          {totalPages > 1 && (
+          {!loading && totalPages > 1 && (
             <div className="flex justify-center items-center gap-4 mt-8">
               <button onClick={prevPage} disabled={currentPage === 1} className={`p-2 rounded-lg border transition btn-press ${currentPage === 1 ? 'opacity-50 cursor-not-allowed border-transparent text-slate-400' : `${darkMode ? 'border-slate-700 hover:bg-slate-800 text-slate-300' : 'border-slate-200 hover:bg-slate-50 text-slate-600'}`}`}><ChevronLeft size={20} /></button>
               <span className={`text-sm font-medium ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>Page {currentPage} of {totalPages}</span>
@@ -406,9 +411,12 @@ const Home = ({ jobs, appliedJobs, darkMode, themeClasses }) => {
 const JobDetails = ({ jobs, appliedJobs, handleApply, darkMode, themeClasses }) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const job = jobs.find(j => j.id === parseInt(id));
+  // Handle both string (_id from mongo) and number (id from local)
+  const job = jobs.find(j => (j._id === id) || (j.id === parseInt(id)));
 
   if (!job) return <div className="p-20 text-center">Job not found</div>;
+
+  const jobId = job._id || job.id;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 animate-fade-in-up">
@@ -426,8 +434,8 @@ const JobDetails = ({ jobs, appliedJobs, handleApply, darkMode, themeClasses }) 
             </div>
           </div>
           <div className="flex flex-col items-start md:items-end gap-3">
-            <button onClick={() => handleApply(job.id)} disabled={appliedJobs.includes(job.id)} className={`px-8 py-3 rounded-lg font-bold text-sm transition btn-press w-full md:w-auto ${appliedJobs.includes(job.id) ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-600/30'}`}>
-              {appliedJobs.includes(job.id) ? 'Application Sent' : 'Apply Now'}
+            <button onClick={() => handleApply(jobId)} disabled={appliedJobs.includes(jobId)} className={`px-8 py-3 rounded-lg font-bold text-sm transition btn-press w-full md:w-auto ${appliedJobs.includes(jobId) ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-600/30'}`}>
+              {appliedJobs.includes(jobId) ? 'Application Sent' : 'Apply Now'}
             </button>
             <div className={`text-sm ${themeClasses.subText}`}>Posted 2 days ago</div>
           </div>
@@ -440,8 +448,8 @@ const JobDetails = ({ jobs, appliedJobs, handleApply, darkMode, themeClasses }) 
         </div>
         <div className="space-y-8">
           <div><h3 className={`text-lg font-bold mb-3 ${themeClasses.heading}`}>About</h3><p className={`leading-relaxed ${themeClasses.subText}`}>{job.description}</p></div>
-          <div><h3 className={`text-lg font-bold mb-3 ${themeClasses.heading}`}>Requirements</h3><ul className={`list-disc pl-5 space-y-2 ${themeClasses.subText}`}>{job.requirements.map((req, i) => <li key={i}>{req}</li>)}</ul></div>
-          <div><h3 className={`text-lg font-bold mb-3 ${themeClasses.heading}`}>Perks</h3><div className="flex flex-wrap gap-2">{job.perks.map((perk, i) => <span key={i} className={`px-3 py-1 rounded-full text-sm flex items-center gap-1.5 ${darkMode ? 'bg-blue-900/30 text-blue-300 border border-blue-800' : 'bg-blue-50 text-blue-700 border border-blue-100'}`}><Star size={14} /> {perk}</span>)}</div></div>
+          <div><h3 className={`text-lg font-bold mb-3 ${themeClasses.heading}`}>Requirements</h3><ul className={`list-disc pl-5 space-y-2 ${themeClasses.subText}`}>{job.requirements && job.requirements.map((req, i) => <li key={i}>{req}</li>)}</ul></div>
+          <div><h3 className={`text-lg font-bold mb-3 ${themeClasses.heading}`}>Perks</h3><div className="flex flex-wrap gap-2">{job.perks && job.perks.map((perk, i) => <span key={i} className={`px-3 py-1 rounded-full text-sm flex items-center gap-1.5 ${darkMode ? 'bg-blue-900/30 text-blue-300 border border-blue-800' : 'bg-blue-50 text-blue-700 border border-blue-100'}`}><Star size={14} /> {perk}</span>)}</div></div>
         </div>
       </div>
     </div>
@@ -450,7 +458,9 @@ const JobDetails = ({ jobs, appliedJobs, handleApply, darkMode, themeClasses }) 
 
 const MyApplications = ({ jobs, appliedJobs, handleWithdraw, darkMode, themeClasses }) => {
   const navigate = useNavigate();
-  const myApps = jobs.filter(job => appliedJobs.includes(job.id));
+  // Filter jobs by matching ID or _id
+  const myApps = jobs.filter(job => appliedJobs.includes(job.id) || appliedJobs.includes(job._id));
+  
   return (
     <div className="max-w-4xl mx-auto px-4 py-12 animate-fade-in-up">
       <h2 className={`text-2xl font-bold mb-6 ${themeClasses.heading}`}>My Applications</h2>
@@ -464,15 +474,15 @@ const MyApplications = ({ jobs, appliedJobs, handleWithdraw, darkMode, themeClas
       ) : (
         <div className="space-y-4">
           {myApps.map(job => (
-            <div key={job.id} className={`p-6 rounded-xl border shadow-sm hover-scale transition-all ${themeClasses.card}`}>
+            <div key={job._id || job.id} className={`p-6 rounded-xl border shadow-sm hover-scale transition-all ${themeClasses.card}`}>
               <div className="flex justify-between items-center">
-                <div className="flex gap-4 cursor-pointer" onClick={() => navigate(`/jobs/${job.id}`)}>
+                <div className="flex gap-4 cursor-pointer" onClick={() => navigate(`/jobs/${job._id || job.id}`)}>
                   <img src={job.logo} alt="Logo" className={`w-14 h-14 rounded-xl object-contain p-1 ${darkMode ? 'brightness-0 invert' : ''}`} />
                   <div><h3 className={`font-bold text-lg ${themeClasses.heading}`}>{job.role}</h3><p className={`text-sm ${themeClasses.subText}`}>{job.company} • {job.location}</p></div>
                 </div>
                 <div className="flex flex-col items-end gap-2">
                   <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200">Under Review</span>
-                  <button onClick={() => handleWithdraw(job.id)} className="text-red-500 text-xs hover:underline flex items-center gap-1 cursor-pointer font-medium btn-press"><Trash2 size={12} /> Withdraw</button>
+                  <button onClick={() => handleWithdraw(job._id || job.id)} className="text-red-500 text-xs hover:underline flex items-center gap-1 cursor-pointer font-medium btn-press"><Trash2 size={12} /> Withdraw</button>
                 </div>
               </div>
             </div>
@@ -601,19 +611,49 @@ const AppContent = () => {
   const [appliedJobs, setAppliedJobs] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
-  const [toast, setToast] = useState(null); // { message, type }
+  const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState(null); 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Attempt to fetch jobs from backend
+    setLoading(true);
+    fetch('http://localhost:5000/api/jobs')
+      .then(res => res.json())
+      .then(data => {
+        if (data.length > 0) {
+          setJobs(data); // Use DB data if available
+        } else {
+          console.warn("DB empty, using initialJobs");
+        }
+        setLoading(false);
+      })
+      .catch(err => {
+        console.warn("Backend not running, using static data");
+        setLoading(false);
+      });
+  }, []);
 
   useEffect(() => {
     const savedApps = localStorage.getItem('internship_applications');
     if (savedApps) setAppliedJobs(JSON.parse(savedApps));
+    
+    const savedUser = localStorage.getItem('current_user');
+    if (savedUser) setCurrentUser(JSON.parse(savedUser));
   }, []);
 
   useEffect(() => {
     localStorage.setItem('internship_applications', JSON.stringify(appliedJobs));
   }, [appliedJobs]);
 
-  // Auto-hide toast after 3 seconds
+  useEffect(() => {
+    if (currentUser) {
+      localStorage.setItem('current_user', JSON.stringify(currentUser));
+    } else {
+      localStorage.removeItem('current_user');
+    }
+  }, [currentUser]);
+
   useEffect(() => {
     if (toast) {
       const timer = setTimeout(() => setToast(null), 3000);
@@ -638,16 +678,14 @@ const AppContent = () => {
   const handleWithdraw = (id) => {
     if (confirm("Withdraw application?")) {
       setAppliedJobs(appliedJobs.filter(jobId => jobId !== id));
-      showToast("Application Withdrawn", "error"); // Red for withdraw
+      showToast("Application Withdrawn", "error");
     }
   };
 
   const handleLoginSubmit = (email, password) => {
-    // 1. Try to find user in localStorage
     const users = JSON.parse(localStorage.getItem('users') || '{}');
     let name = users[email];
 
-    // 2. Fallback: Extract name from email if not found
     if (!name) {
       name = email.split('@')[0];
       name = name.charAt(0).toUpperCase() + name.slice(1);
@@ -660,7 +698,6 @@ const AppContent = () => {
   };
 
   const handleRegisterSubmit = (name, email, password) => {
-    // Save to localStorage
     const users = JSON.parse(localStorage.getItem('users') || '{}');
     users[email] = name;
     localStorage.setItem('users', JSON.stringify(users));
@@ -682,20 +719,11 @@ const AppContent = () => {
   return (
     <div className={`min-h-screen font-sans transition-colors duration-300 ${themeClasses.bg} ${themeClasses.text}`}>
       <AnimationStyles />
-      
-      {/* Toast Notification */}
       <Toast message={toast?.message} type={toast?.type} onClose={() => setToast(null)} />
-
-      <Navbar 
-        currentUser={currentUser} 
-        setCurrentUser={setCurrentUser} 
-        darkMode={darkMode} 
-        setDarkMode={setDarkMode} 
-        themeClasses={themeClasses} 
-      />
+      <Navbar currentUser={currentUser} setCurrentUser={setCurrentUser} darkMode={darkMode} setDarkMode={setDarkMode} themeClasses={themeClasses} />
       
       <Routes>
-        <Route path="/" element={<Home jobs={jobs} appliedJobs={appliedJobs} handleApply={handleApply} darkMode={darkMode} themeClasses={themeClasses} />} />
+        <Route path="/" element={<Home jobs={jobs} appliedJobs={appliedJobs} handleApply={handleApply} darkMode={darkMode} themeClasses={themeClasses} loading={loading} />} />
         <Route path="/applications" element={<MyApplications jobs={jobs} appliedJobs={appliedJobs} handleWithdraw={handleWithdraw} darkMode={darkMode} themeClasses={themeClasses} />} />
         <Route path="/profile" element={<ProfilePage currentUser={currentUser} appliedJobs={appliedJobs} darkMode={darkMode} themeClasses={themeClasses} />} />
         <Route path="/jobs/:id" element={<JobDetails jobs={jobs} appliedJobs={appliedJobs} handleApply={handleApply} darkMode={darkMode} themeClasses={themeClasses} />} />
@@ -706,7 +734,6 @@ const AppContent = () => {
   );
 };
 
-// --- MAIN APP COMPONENT ---
 export default function App() {
   return (
     <HashRouter>
