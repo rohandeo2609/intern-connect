@@ -1,86 +1,107 @@
-🎓 InternConnect - Student Internship Portal
+# 🎓 InternConnect — Student Internship Portal
 
-InternConnect is a modern, responsive web application designed to help students find and apply for internships. Built with React.js and Tailwind CSS, it mimics real-world job portals with a focus on User Experience (UI/UX) and smooth interactions.
+InternConnect is a modern, responsive web application that helps students discover, explore, and apply for internships through a clean, intuitive interface. Inspired by real-world job portals, the project focuses heavily on **UI/UX**, smooth navigation, and realistic application workflows.
 
-🔗 Live Demo: Yet to be deployed
+🔗 **Live Demo:** _Add Firebase Hosting link here_  
+📸 **Screenshots:** _Add dashboard screenshots here_
 
+---
 
-✨ Key Features
+## ✨ Features
 
-🔍 Smart Search & Filtering: Instantly filter internships by Category (Tech, Design, Marketing) or City (Pune, Mumbai, Remote).
+🔍 **Smart Search & Filtering**  
+Filter internships instantly by **Category** (Tech, Design, Marketing) and **Location** (Pune, Mumbai, Remote).
 
-📄 Pagination System: Organized job feed displaying 5 top listings per page for better readability.
+📄 **Pagination System**  
+Clean and readable job feed with **5 listings per page** for better user experience.
 
-💼 Detailed Job View: Dedicated pages for every internship displaying Stipend, Duration, Requirements, and Perks.
+💼 **Detailed Internship View**  
+Dedicated pages for each internship with information such as **stipend, duration, requirements, and perks**.
 
-📝 Application Tracking: A "My Applications" dashboard that tracks applied jobs and allows application withdrawal.
+📝 **Application Tracking**  
+A personalized **“My Applications”** dashboard to track applied internships and withdraw applications.
 
-🌗 Dark/Light Mode: Fully responsive theme switcher for day and night usage.
+🌗 **Dark / Light Mode**  
+Fully responsive theme switcher for comfortable day and night usage.
 
-💾 Local Storage Persistence: Your applied jobs and login state are saved even if you refresh the browser.
+💾 **Local Storage Persistence**  
+Applied jobs and authentication state persist even after browser refresh.
 
-🔐 Simulated Auth: Complete Login and Registration UI flows with protected routes.
+🔐 **Simulated Authentication**  
+Complete **Login & Registration UI flows** with protected routes.
 
-🎨 Premium UI: Featuring glass-morphism, smooth animations, and interactive hover effects.
+🎨 **Premium UI/UX**  
+Glassmorphism elements, smooth animations, and interactive hover effects.
 
-🛠️ Tech Stack
+---
 
-Frontend: React.js (Vite)
+## 🛠️ Tech Stack
 
-Styling: Tailwind CSS (v4)
+**Frontend:** React.js (Vite)  
+**Styling:** Tailwind CSS  
+**Routing:** React Router DOM (HashRouter)  
+**Icons:** Lucide React  
+**Deployment:** Firebase Hosting  
 
-Routing: React Router DOM (HashRouter)
+---
 
-Icons: Lucide React
+## 🚀 Getting Started (Run Locally)
 
-Deployment: Firebase Hosting
+Follow these steps to run the project on your local machine:
 
-🚀 How to Run Locally
+### 1️⃣ Clone the Repository
+```bash
+git clone https://github.com/your-username/intern-connect.git
+cd intern-connect
+```
 
-If you want to run this project on your local machine:
-
-Clone the repository
-
-git clone [https://github.com/your-username/intern-connect.git](https://github.com/your-username/intern-connect.git)
-cd internship-portal
-
-
-Install Dependencies
-
+### 2️⃣ Install Dependencies
+```bash
 npm install
+```
 
-
-Run the Development Server
-
+### 3️⃣ Start the Development Server
+```bash
 npm run dev
+```
 
+### 4️⃣ Open in Browser
+Visit:
+```
+http://localhost:5173
+```
 
-Open in Browser
-Visit http://localhost:5173 to see the app.
+---
 
-📂 Project Structure
+## 📂 Project Structure
 
+```text
 src/
-├── App.jsx           # Main Application Logic & Routing
-├── index.css         # Tailwind Imports & Global Styles
-└── main.jsx          # React Entry Point
+├── App.jsx        # Main application logic & routing
+├── main.jsx       # React entry point
+├── index.css      # Tailwind imports & global styles
+└── pages/         # Application pages & views
+```
 
+---
 
-🔮 Future Improvements
+## 🔮 Future Improvements
 
-Backend Integration: Connect to Node.js/Express & MongoDB for real-time database storage.
+- 🔗 **Backend Integration** using Node.js, Express, and MongoDB  
+- 📄 **Resume / CV Uploads** for applications  
+- 🧑‍💼 **Admin Dashboard** for recruiters to post and manage internships  
+- 🔐 **Real Authentication** with JWT & database persistence  
 
-File Uploads: Allow users to upload Resumes/CVs.
+---
 
-Admin Dashboard: A separate view for recruiters to post jobs.
+## 👤 Author
 
-👤 Author
+**Rohan Deo**  
+2nd Year Engineering Student | Aspiring Full Stack & AI/ML Developer  
 
-Rohan Deo
+🔗 LinkedIn:  
+💻 GitHub:  
 
-Full Stack Developer & 2nd Year Student
+---
 
-LinkedIn
-
-GitHub
- 
+⭐ If you find this project useful, feel free to star the repository!
