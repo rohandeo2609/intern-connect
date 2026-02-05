@@ -80,7 +80,9 @@ Rohan Deo
 
 Full Stack Developer & 2nd Year Student
 
-LinkedIn
+LinkedIn: www.linkedin.com/in/rohandeo4693
 
-GitHub
+GitHub: You are already on it.
+
+X: https://x.com/RohanDeo26
  
