@@ -10,7 +10,7 @@ app.use(express.json());
 const uri = "mongodb+srv://rohandeo2609:Valmarc_4693@intern-connect.vx8bmv7.mongodb.net/?appName=intern-connect";
 mongoose.connect(uri)
     .then(() => console.log("MongoDB Connected"))
-    .catch(err => console.log(err));cl
+    .catch(err => console.log(err));
 
 const jobSchema = new mongoose.Schema({
     role: String,
