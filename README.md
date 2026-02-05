@@ -87,21 +87,19 @@ src/
 
 ## 🔮 Future Improvements
 
-- 🔗 **Backend Integration** using Node.js, Express, and MongoDB  
-- 📄 **Resume / CV Uploads** for applications  
-- 🧑‍💼 **Admin Dashboard** for recruiters to post and manage internships  
-- 🔐 **Real Authentication** with JWT & database persistence  
+Backend Integration: Connect to Node.js/Express & MongoDB for real-time database storage.
 
----
+File Uploads: Allow users to upload Resumes/CVs.
 
-## 👤 Author
+Admin Dashboard: A separate view for recruiters to post jobs.
 
-**Rohan Deo**  
-2nd Year Engineering Student | Aspiring Full Stack & AI/ML Developer  
+👤 Author
 
-🔗 LinkedIn:  
-💻 GitHub:  
+Rohan Deo
 
----
+Full Stack Developer & 2nd Year Student
 
-⭐ If you find this project useful, feel free to star the repository!
+LinkedIn
+
+GitHub
+ 
