@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { HashRouter, Routes, Route, Link, useNavigate, useLocation, useParams } from 'react-router-dom';
 import { Search, MapPin, Briefcase, DollarSign, Clock, Filter, CheckCircle, User, Mail, Lock, ArrowRight, Sun, Moon, Trash2, ChevronLeft, Star, ChevronRight, X, Building2, GraduationCap, FileText, Download, Edit3 } from 'lucide-react';
 
-// --- ANIMATION STYLES ---
 const AnimationStyles = () => (
   <style>{`
     @keyframes fadeInUp {
@@ -27,7 +26,6 @@ const AnimationStyles = () => (
   `}</style>
 );
 
-// --- REAL COMPANY DATA ---
 const COMPANY_DATA = [
   { name: "Infosys", logo: "https://upload.wikimedia.org/wikipedia/commons/9/95/Infosys_logo.svg" },
   { name: "Google", logo: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" },
@@ -35,12 +33,11 @@ const COMPANY_DATA = [
   { name: "Amazon", logo: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" },
   { name: "TCS", logo: "https://upload.wikimedia.org/wikipedia/commons/b/b1/Tata_Consultancy_Services_Logo.svg" },
   { name: "Wipro", logo: "https://upload.wikimedia.org/wikipedia/commons/a/a0/Wipro_Primary_Logo_Color_RGB.svg" },
-  { name: "Persistent", logo: "https://upload.wikimedia.org/wikipedia/commons/8/87/Persistent_Systems_Logo.svg" },
+  { name: "Deloitte", logo: "https://upload.wikimedia.org/wikipedia/commons/5/56/Deloitte.svg" }, 
   { name: "Meta", logo: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg" },
   { name: "Netflix", logo: "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" }
 ];
 
-// --- DATA HELPER ---
 const generateRandomJobs = () => {
   const roles = [
     { title: "Python Developer", cat: "Tech" },
@@ -152,17 +149,17 @@ const initialJobs = [
   },
   {
     id: 6,
-    role: "Java Developer",
-    company: "Persistent",
+    role: "Risk Advisory Intern",
+    company: "Deloitte",
     location: "Pune",
-    stipend: "₹18,000 / month",
+    stipend: "₹22,000 / month",
     duration: "6 Months",
-    category: "Tech",
+    category: "Finance",
     type: "In-Office",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/8/87/Persistent_Systems_Logo.svg",
-    description: "Join the core development team to work on enterprise Java applications. You will learn Spring Boot and Microservices architecture.",
-    requirements: ["Strong Java basics", "Knowledge of SQL", "OOPs concepts"],
-    perks: ["Flexible hours", "Certificate", "Letter of Recommendation"]
+    logo: "https://upload.wikimedia.org/wikipedia/commons/5/56/Deloitte.svg",
+    description: "Join our Risk Advisory practice to help clients manage risk and uncertainty. You will work on internal audits, cybersecurity, and regulatory compliance projects.",
+    requirements: ["Strong analytical skills", "Knowledge of basic auditing principles", "Good communication skills"],
+    perks: ["Corporate exposure", "Paid leaves", "Certificate"]
   },
   {
     id: 7,
@@ -180,8 +177,6 @@ const initialJobs = [
   },
   ...generateRandomJobs()
 ];
-
-// --- COMPONENTS ---
 
 const Toast = ({ message, type, onClose }) => {
   if (!message) return null;
@@ -220,6 +215,10 @@ const Navbar = ({ currentUser, setCurrentUser, darkMode, setDarkMode, themeClass
           <Link to="/applications" className={`hover:text-blue-600 transition-colors relative group ${isActive('/applications') ? 'text-blue-600' : ''}`}>
             My Applications
             <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full ${isActive('/applications') ? 'w-full' : ''}`}></span>
+          </Link>
+          <Link to="/profile" className={`hover:text-blue-600 transition-colors relative group ${isActive('/profile') ? 'text-blue-600' : ''}`}>
+            Profile
+            <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full ${isActive('/profile') ? 'w-full' : ''}`}></span>
           </Link>
         </div>
 
