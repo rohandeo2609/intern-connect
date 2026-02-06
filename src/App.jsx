@@ -618,7 +618,7 @@ const AppContent = () => {
   useEffect(() => {
     // Attempt to fetch jobs from backend
     setLoading(true);
-    fetch('https://intern-connect-api.onrender.com')
+    fetch('https://intern-connect-api.onrender.com/api/jobs')
       .then(res => res.json())
       .then(data => {
         if (data.length > 0) {
